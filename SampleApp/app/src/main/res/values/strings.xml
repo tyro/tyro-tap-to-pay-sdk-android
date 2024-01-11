@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">SDK Demo</string>
+    <string name="tap_to_pay_sdk_demo">Tap to Pay SDK Demo</string>
+    <string name="purchase">Purchase</string>
+    <string name="refund">Refund</string>
+    <string name="proceed">Proceed</string>
+    <string name="close">Close</string>
+    <string name="approved">Approved</string>
+    <string name="done">Done</string>
+    <string name="initialisation_failed">Initialisation failed</string>
+    <string name="transaction_failed">Transaction failed</string>
+
+    <string name="content_desc_tyro_logo">tyro logo</string>
+    <string name="content_desc_eftpos_logo">eftpos logo</string>
+    <string name="content_desc_close">close</string>
+    <string name="content_desc_backspace">backspace</string>
+    <string name="content_desc_back">back</string>
+    <string name="content_desc_error">error</string>
+</resources>
