@@ -129,13 +129,15 @@ The demo app has three build flavors:
 The app should run in `stub` flavor out of the box which emulates success.
 
 If you want get to test the sample app in the development environment, you will need to:
-- Obtain the keystore `sampleappkeystore.jks` file from Tyro and place it in the `SampleApp/app` folder.
+- Obtain the keystore `sampleappkeystore.jks` file and password from Tyro and place the keystore in the `SampleApp/app` folder.
 - Update the `signingConfigs` ,`storeFile`,`keyPassword`,`storePassword` part of `app/build.gradle.kts` with the keystore and password provided to you.
 
 If you want to run your own App against development or production environments, you will need to:
 - Change the `applicationId` in `build.gradle` to your own
 - Include [your own keystore](https://developer.android.com/studio/publish/app-signing#generate-key), and update the `signingConfigs` part of `build.gradle` with your keystore details
-- Export a public certificate from your keystore, and provide it to Tyro along with your `applicationId`
+- Export a public certificate from your keystore and provide it to Tyro along with your `applicationId`
+    - Run the following to generate your public cert: `keytool -export -alias key0 -keystore yourkeystore.jks -rfc -file publiccert.pem`
+    - Make sure the alias is the same as the one you used to generate the keystore
 - Implement authentication with Tyro on your own server
 
 See our [documentation preview](https://preview.redoc.ly/tyro-connect/pla-5831/pos/tap-to-pay/android/integrate-sdk/) for more detail on these requirements.
