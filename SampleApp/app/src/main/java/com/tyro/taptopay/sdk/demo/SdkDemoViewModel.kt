@@ -82,7 +82,7 @@ class SdkDemoViewModel(private val tapToPaySdk: TapToPaySdk) : ViewModel() {
             TXN_CANCELLED ->
                 _state.update { it.copy(screen = AMOUNT) }
             TXN_SUCCESS ->
-                _state.update { it.copy(screen = SUCCESS) }
+                _state.update { it.copy(screen = SUCCESS, transactionId = result.detail?.transactionID) }
             else ->
                 _state.update {
                     it.copy(
@@ -91,6 +91,19 @@ class SdkDemoViewModel(private val tapToPaySdk: TapToPaySdk) : ViewModel() {
                     )
                 }
         }
+    }
+
+    suspend fun sendDigitalReceipt(email: String): Boolean {
+        if (email.isNullOrBlank()) {
+            return false
+        }
+        if (state.value.transactionId.isNullOrBlank()) {
+            return false
+        }
+        _state.update { it.copy(sendingEmail = true) }
+        val requestSent = tapToPaySdk.sendDigitalReceipt(state.value.transactionId!!, email)
+        _state.update { it.copy(sendingEmail = false) }
+        return requestSent
     }
 
     fun resetToHome() {

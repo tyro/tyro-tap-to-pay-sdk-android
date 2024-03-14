@@ -16,4 +16,8 @@
     <string name="content_desc_backspace">backspace</string>
     <string name="content_desc_back">back</string>
     <string name="content_desc_error">error</string>
+    <string name="digital_receipt_input_label">Customer\'s Email</string>
+    <string name="send_digital_receipt_button">Send Digital Receipt</string>
+    <string name="digital_receipt_success_msg">Digital receipt will be sent</string>
+    <string name="digital_receipt_failed_msg">Digital receipt request failed</string>
 </resources>
