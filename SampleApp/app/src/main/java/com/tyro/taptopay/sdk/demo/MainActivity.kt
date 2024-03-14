@@ -1,6 +1,7 @@
 package com.tyro.taptopay.sdk.demo
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -8,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.lifecycleScope
 import com.tyro.taptopay.sdk.api.TapToPaySdk
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.AMOUNT
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.HOME
@@ -22,6 +24,7 @@ import com.tyro.taptopay.sdk.demo.ui.screen.LoadingScreen
 import com.tyro.taptopay.sdk.demo.ui.screen.SuccessScreen
 import com.tyro.taptopay.sdk.demo.ui.screen.TransactionErrorScreen
 import com.tyro.taptopay.sdk.demo.ui.theme.SdkDemoTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val viewModel: SdkDemoViewModel by viewModels { SdkDemoViewModel.Factory }
@@ -76,6 +79,23 @@ class MainActivity : ComponentActivity() {
                         SuccessScreen(
                             viewModel = viewModel,
                             onDone = { viewModel.resetToHome() },
+                            onSendDigitalReceipt = { email ->
+                                lifecycleScope.launch {
+                                    // Note this will not work on the sandbox environment
+                                    val emailQueued = viewModel.sendDigitalReceipt(email)
+                                    Toast.makeText(
+                                        applicationContext,
+                                        if (emailQueued) {
+                                            getText(
+                                                R.string.digital_receipt_success_msg,
+                                            )
+                                        } else {
+                                            getText(R.string.digital_receipt_failed_msg)
+                                        },
+                                        Toast.LENGTH_SHORT,
+                                    ).show()
+                                }
+                            },
                         )
 
                     TRANSACTION_ERROR ->

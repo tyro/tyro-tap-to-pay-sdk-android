@@ -140,7 +140,11 @@ If you want to run your own App against development or production environments, 
     - Make sure the alias is the same as the one you used to generate the keystore
 - Implement authentication with Tyro on your own server
 
-See our [documentation preview](https://preview.redoc.ly/tyro-connect/pla-5831/pos/tap-to-pay/android/integrate-sdk/) for more detail on these requirements.
+See our [documentation preview](https://preview.redoc.ly/tyro-connect/pla-5831/pos/tap-to-pay/android/integrate-sdk/) for more 
+detail on these requirements.
+
+### Digital Receipt
+Please note: digital receipt functionality does not work on the sandbox environment
 
 ## Need help?
 Reach out to the `Connect Support Team` at [connect-support@tyro.com](mailto:connect-support@tyro.com)

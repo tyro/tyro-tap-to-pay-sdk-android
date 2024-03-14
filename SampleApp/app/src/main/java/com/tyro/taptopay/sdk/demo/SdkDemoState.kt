@@ -7,6 +7,8 @@ data class SdkDemoState(
     val amountString: String = "$0.00",
     val transactionType: TransactionType = TransactionType.PURCHASE,
     val screen: SdkDemoScreen = SdkDemoScreen.HOME,
+    val sendingEmail: Boolean = false,
+    val transactionId: String? = null,
 )
 
 enum class SdkDemoScreen {
