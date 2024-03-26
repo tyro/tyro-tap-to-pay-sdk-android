@@ -9,7 +9,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.tyro.taptopay.sdk.demo"
+        applicationId = "com.tyro.taptopay.sdk.demo" // DO NOT CHANGE THIS if using sampleappkeystore.jks
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -24,10 +24,10 @@ android {
     // TODO update this with your own signing config in order to run against the dev or prod environment
     signingConfigs {
         create("default") {
-            keyAlias = "key0"
-            keyPassword = "password"
-            storeFile = file("update_this_with_your_own.jks")
-            storePassword = "password"
+            keyAlias = "key0" // DO NOT CHANGE THIS if using sampleappkeystore.jks
+            keyPassword = "password" // UPDATE THIS if using sampleappkeystore.jks
+            storeFile = file("update_this_with_your_own.jks") // UPDATE THIS if using sampleappkeystore.jks
+            storePassword = "password" // UPDATE THIS if using sampleappkeystore.jks
         }
     }
 
