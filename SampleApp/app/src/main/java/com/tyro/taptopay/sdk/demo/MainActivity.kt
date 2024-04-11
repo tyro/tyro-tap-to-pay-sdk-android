@@ -51,6 +51,25 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun sendDigitalReceipt(email: String) {
+        lifecycleScope.launch {
+            // Note this will not work on the sandbox environment
+            val emailQueued = viewModel.sendDigitalReceipt(email)
+            Toast.makeText(
+                applicationContext,
+                if (emailQueued) {
+                    getText(
+                        R.string.digital_receipt_success_msg,
+                    )
+                } else {
+                    getText(R.string.digital_receipt_failed_msg)
+                },
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
+    }
+
+
     @Composable
     fun TapToPaySdkDemoApp(viewModel: SdkDemoViewModel) {
         val state = viewModel.state.collectAsState().value
@@ -79,29 +98,14 @@ class MainActivity : ComponentActivity() {
                         SuccessScreen(
                             viewModel = viewModel,
                             onDone = { viewModel.resetToHome() },
-                            onSendDigitalReceipt = { email ->
-                                lifecycleScope.launch {
-                                    // Note this will not work on the sandbox environment
-                                    val emailQueued = viewModel.sendDigitalReceipt(email)
-                                    Toast.makeText(
-                                        applicationContext,
-                                        if (emailQueued) {
-                                            getText(
-                                                R.string.digital_receipt_success_msg,
-                                            )
-                                        } else {
-                                            getText(R.string.digital_receipt_failed_msg)
-                                        },
-                                        Toast.LENGTH_SHORT,
-                                    ).show()
-                                }
-                            },
+                            onSendDigitalReceipt = { email -> sendDigitalReceipt(email) },
                         )
 
                     TRANSACTION_ERROR ->
                         TransactionErrorScreen(
                             viewModel = viewModel,
                             onDone = { viewModel.resetToHome() },
+                            onSendDigitalReceipt = { email -> sendDigitalReceipt(email) },
                         )
 
                     INIT_ERROR ->
