@@ -80,7 +80,7 @@ class SdkDemoViewModel(private val tapToPaySdk: TapToPaySdk) : ViewModel() {
     fun onTransactionResult(result: TransactionResult) {
         when (result.status) {
             TXN_CANCELLED ->
-                _state.update { it.copy(screen = AMOUNT) }
+                _state.update { it.copy(screen = AMOUNT, transactionId = result.detail?.transactionID) }
             TXN_SUCCESS ->
                 _state.update { it.copy(screen = SUCCESS, transactionId = result.detail?.transactionID) }
             else ->
@@ -88,6 +88,7 @@ class SdkDemoViewModel(private val tapToPaySdk: TapToPaySdk) : ViewModel() {
                     it.copy(
                         screen = TRANSACTION_ERROR,
                         errorMessage = result.errorMessage(),
+                        transactionId = result.detail?.transactionID
                     )
                 }
         }
