@@ -140,7 +140,7 @@ fun AmountScreen(
                     style = typography.bodyLarge,
                     fontSize = 48.sp,
                     color =
-                        if (state.amountString.isZeroAmount()) {
+                        if (!state.amountString.isValid()) {
                             tyroDemoDarkGrey
                         } else {
                             tyroDemoBlack
@@ -188,7 +188,7 @@ fun AmountScreen(
                         Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 24.dp, vertical = 8.dp),
-                    enabled = !state.amountString.isZeroAmount(),
+                    enabled = state.amountString.isValid(),
                 ) {
                     Text(stringResource(R.string.proceed), style = typography.bodyMedium)
                 }
@@ -198,4 +198,7 @@ fun AmountScreen(
     }
 }
 
-private fun String.isZeroAmount() = (this == "$0.00")
+private fun String.isValid(): Boolean {
+    val amountInCents = this.replace("$", "").replace(".", "").toInt();
+    return (amountInCents in 1..9_999_999);
+}
