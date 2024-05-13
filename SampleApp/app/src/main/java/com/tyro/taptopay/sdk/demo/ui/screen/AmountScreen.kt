@@ -140,7 +140,7 @@ fun AmountScreen(
                     style = typography.bodyLarge,
                     fontSize = 48.sp,
                     color =
-                        if (!state.amountString.isValid()) {
+                        if (!state.amountString.isValidAmount()) {
                             tyroDemoDarkGrey
                         } else {
                             tyroDemoBlack
@@ -188,7 +188,7 @@ fun AmountScreen(
                         Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 24.dp, vertical = 8.dp),
-                    enabled = state.amountString.isValid(),
+                    enabled = state.amountString.isValidAmount(),
                 ) {
                     Text(stringResource(R.string.proceed), style = typography.bodyMedium)
                 }
@@ -198,7 +198,8 @@ fun AmountScreen(
     }
 }
 
-private fun String.isValid(): Boolean {
+private fun String.isValidAmount(): Boolean {
+    // sdk will throw if value is not between 0 - 100,000,000
     val amountInCents = this.replace("$", "").replace(".", "").toInt();
     return (amountInCents in 1..9_999_999);
 }
