@@ -89,28 +89,24 @@ class MainActivity : ComponentActivity() {
 
                     AMOUNT ->
                         AmountScreen(
-                            viewModel = viewModel,
                             onNext = { s -> viewModel.startTransaction(this, s) },
                             onCancel = { viewModel.resetToHome() },
                         )
 
                     SUCCESS ->
                         SuccessScreen(
-                            viewModel = viewModel,
                             onDone = { viewModel.resetToHome() },
                             onSendDigitalReceipt = { email -> sendDigitalReceipt(email) },
                         )
 
                     TRANSACTION_ERROR ->
                         TransactionErrorScreen(
-                            viewModel = viewModel,
                             onDone = { viewModel.resetToHome() },
                             onSendDigitalReceipt = { email -> sendDigitalReceipt(email) },
                         )
 
                     INIT_ERROR ->
                         InitErrorScreen(
-                            viewModel = viewModel,
                             onClose = { this.finish() },
                         )
                 }

@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tyro.taptopay.sdk.api.TapToPaySdk
 import com.tyro.taptopay.sdk.api.TyroEnvStub
 import com.tyro.taptopay.sdk.demo.R
@@ -51,7 +52,7 @@ import com.tyro.taptopay.sdk.demo.ui.theme.tyroDemoBlack
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SuccessScreen(
-    viewModel: SdkDemoViewModel,
+    viewModel: SdkDemoViewModel = viewModel(),
     onDone: () -> Unit,
     onSendDigitalReceipt: (email: String) -> Unit,
 ) {
@@ -117,7 +118,9 @@ fun SuccessScreen(
         TextField(
             value = email,
             onValueChange = { email = it },
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 0.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 0.dp),
             label = { Text(stringResource(R.string.digital_receipt_input_label), style = MaterialTheme.typography.titleSmall) },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         )

@@ -35,6 +35,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tyro.taptopay.sdk.api.data.request.TransactionType
 import com.tyro.taptopay.sdk.demo.R
 import com.tyro.taptopay.sdk.demo.SdkDemoViewModel
@@ -84,7 +85,7 @@ fun RowScope.AmountKey(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AmountScreen(
-    viewModel: SdkDemoViewModel,
+    viewModel: SdkDemoViewModel = viewModel(),
     onNext: (String) -> Unit,
     onCancel: () -> Unit,
 ) {

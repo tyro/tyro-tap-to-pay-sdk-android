@@ -41,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tyro.taptopay.sdk.api.TapToPaySdk
 import com.tyro.taptopay.sdk.api.TyroEnvStub
 import com.tyro.taptopay.sdk.demo.R
@@ -51,7 +52,7 @@ import com.tyro.taptopay.sdk.demo.ui.theme.tyroDemoRed
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionErrorScreen(
-    viewModel: SdkDemoViewModel,
+    viewModel: SdkDemoViewModel = viewModel(),
     onDone: () -> Unit,
     onSendDigitalReceipt: (email: String) -> Unit,
 ) {
