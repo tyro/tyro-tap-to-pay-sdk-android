@@ -83,6 +83,7 @@ class MainActivity : ComponentActivity() {
 
                     HOME ->
                         HomeScreen(
+                            onAdminSettings = {viewModel.updateAdminSettings(this)},
                             onPurchase = { viewModel.beginPurchaseFlow() },
                             onRefund = { viewModel.beginRefundFlow() },
                         )
