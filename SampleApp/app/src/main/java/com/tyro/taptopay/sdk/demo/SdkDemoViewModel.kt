@@ -63,6 +63,10 @@ class SdkDemoViewModel(private val tapToPaySdk: TapToPaySdk) : ViewModel() {
         }
     }
 
+    fun updateAdminSettings(activity: ComponentActivity,) {
+        tapToPaySdk.updateAdminSettings(activity)
+    }
+
     fun startTransaction(
         activity: ComponentActivity,
         formattedAmount: String,

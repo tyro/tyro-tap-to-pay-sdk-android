@@ -31,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tyro.taptopay.sdk.demo.R
 import com.tyro.taptopay.sdk.demo.SdkDemoViewModel
 import com.tyro.taptopay.sdk.demo.ui.theme.tyroDemoBlack
@@ -38,7 +39,7 @@ import com.tyro.taptopay.sdk.demo.ui.theme.tyroDemoBlack
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InitErrorScreen(
-    viewModel: SdkDemoViewModel,
+    viewModel: SdkDemoViewModel = viewModel(),
     onClose: () -> Unit,
 ) {
     val state = viewModel.state.collectAsState().value

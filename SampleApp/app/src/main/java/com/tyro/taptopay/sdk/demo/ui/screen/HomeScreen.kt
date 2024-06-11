@@ -23,6 +23,7 @@ import com.tyro.taptopay.sdk.demo.R
 
 @Composable
 fun HomeScreen(
+    onAdminSettings: () -> Unit,
     onPurchase: () -> Unit,
     onRefund: () -> Unit,
 ) {
@@ -39,6 +40,16 @@ fun HomeScreen(
         Spacer(modifier = Modifier.weight(1f))
         Text(stringResource(R.string.tap_to_pay_sdk_demo), style = typography.bodyLarge)
         Spacer(modifier = Modifier.weight(1f))
+        Button(
+            { onAdminSettings() },
+            contentPadding = PaddingValues(18.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+        ) {
+            Text(stringResource(R.string.admin_settings), style = typography.bodyMedium)
+        }
         Button(
             { onPurchase() },
             contentPadding = PaddingValues(18.dp),
