@@ -9,6 +9,8 @@ data class SdkDemoState(
     val screen: SdkDemoScreen = SdkDemoScreen.HOME,
     val sendingEmail: Boolean = false,
     val transactionId: String? = null,
+    val amountAuthorised: String? = null,
+    val surcharge: String? = null,
 )
 
 enum class SdkDemoScreen {
