@@ -21,6 +21,7 @@ import com.tyro.taptopay.sdk.demo.SdkDemoScreen.TRANSACTION_ERROR
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import java.math.BigDecimal
 import java.util.UUID
 
 class SdkDemoViewModel(private val tapToPaySdk: TapToPaySdk) : ViewModel() {
@@ -96,6 +97,12 @@ class SdkDemoViewModel(private val tapToPaySdk: TapToPaySdk) : ViewModel() {
                     )
                 }
         }
+        _state.update {
+            it.copy(
+                amountAuthorised = result.detail?.amount,
+                surcharge = result.detail?.surcharge,
+            )
+        }
     }
 
     suspend fun sendDigitalReceipt(email: String): Boolean {
@@ -150,6 +157,18 @@ class SdkDemoViewModel(private val tapToPaySdk: TapToPaySdk) : ViewModel() {
 
     fun onAmountClearAll() {
         _state.update { it.copy(amountString = "$0.00") }
+    }
+
+    fun getTransactionAmount(): String {
+        val surcharge = (state.value.surcharge)?.toBigDecimal()?.divide(BigDecimal("100"))
+        return if (state.value.amountAuthorised != null) {
+            val amount = state.value.amountAuthorised!!.toBigDecimal().divide(BigDecimal("100"))
+            "$%.${2}f".format(amount)
+        } else {
+            val netAmount = state.value.amountString.replace("$", "").replace(".", "").toBigDecimal()
+            val total = netAmount + (surcharge ?: BigDecimal("0.0"))
+            "$%.${2}f".format(total)
+        }
     }
 
     private fun InitResult.errorMessage() = "${this.status}\n${this.errorMessage.orEmpty()}"

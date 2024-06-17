@@ -8,6 +8,7 @@
     <string name="close">Close</string>
     <string name="approved">Approved</string>
     <string name="done">Done</string>
+    <string name="surcharge_applied">Include surcharge: %s </string>
     <string name="initialisation_failed">Initialisation failed</string>
     <string name="transaction_failed">Transaction failed</string>
 

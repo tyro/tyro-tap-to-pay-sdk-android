@@ -34,12 +34,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -58,8 +56,6 @@ fun SuccessScreen(
 ) {
     val state = viewModel.state.collectAsState().value
     var email by remember { mutableStateOf("") }
-    var emailButtonSize by remember { mutableStateOf(DpSize.Zero) }
-    val density = LocalDensity.current
     BackHandler(onBack = { onDone() })
     Column(
         verticalArrangement = Arrangement.Center,
@@ -107,11 +103,23 @@ fun SuccessScreen(
             style = MaterialTheme.typography.bodyLarge,
         )
         Text(
-            text = state.amountString,
+            text = viewModel.getTransactionAmount(),
             color = tyroDemoBlack,
             fontSize = 64.sp,
             style = MaterialTheme.typography.bodyMedium,
         )
+        if (state.surcharge != null) {
+            val surcharge = (state.surcharge).toDouble().div(100.0)
+            Text(
+                text =
+                stringResource(
+                    R.string.surcharge_applied,
+                    "$%.${2}f".format(surcharge),
+                ),
+                color = tyroDemoBlack,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
 
         Spacer(modifier = Modifier.weight(1f))
 

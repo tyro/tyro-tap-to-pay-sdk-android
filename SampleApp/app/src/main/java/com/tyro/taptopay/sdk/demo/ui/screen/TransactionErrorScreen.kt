@@ -112,7 +112,7 @@ fun TransactionErrorScreen(
             style = MaterialTheme.typography.bodyMedium,
         )
         Text(
-            text = state.amountString,
+            text = viewModel.getTransactionAmount(),
             color = tyroDemoRed,
             fontSize = 32.sp,
             style = MaterialTheme.typography.bodyMedium,
