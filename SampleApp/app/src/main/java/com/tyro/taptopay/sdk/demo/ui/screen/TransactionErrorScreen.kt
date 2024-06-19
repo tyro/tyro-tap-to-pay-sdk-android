@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -52,9 +53,9 @@ import com.tyro.taptopay.sdk.demo.ui.theme.tyroDemoRed
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionErrorScreen(
-    viewModel: SdkDemoViewModel = viewModel(),
     onDone: () -> Unit,
     onSendDigitalReceipt: (email: String) -> Unit,
+    viewModel: SdkDemoViewModel = viewModel(),
 ) {
     val state = viewModel.state.collectAsState().value
     var email by remember { mutableStateOf("") }
@@ -69,16 +70,16 @@ fun TransactionErrorScreen(
                 painter = painterResource(id = R.drawable.tyro_logo_dark),
                 contentDescription = stringResource(R.string.content_desc_tyro_logo),
                 modifier =
-                    Modifier
-                        .size(120.dp)
-                        .align(Alignment.Center),
+                Modifier
+                    .size(120.dp)
+                    .align(Alignment.Center),
             )
             TopAppBar(
                 colors =
-                    TopAppBarDefaults.mediumTopAppBarColors(
-                        containerColor = Color.Transparent,
-                        navigationIconContentColor = tyroDemoBlack,
-                    ),
+                TopAppBarDefaults.mediumTopAppBarColors(
+                    containerColor = Color.Transparent,
+                    navigationIconContentColor = tyroDemoBlack,
+                ),
                 title = { },
                 navigationIcon = {
                     IconButton(onClick = onDone) {
@@ -91,14 +92,13 @@ fun TransactionErrorScreen(
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-
         Image(
             painter = painterResource(id = R.drawable.ic_warning_80dp),
             contentDescription = stringResource(R.string.content_desc_error),
             modifier =
-                Modifier
-                    .size(80.dp)
-                    .padding(8.dp),
+            Modifier
+                .size(80.dp)
+                .padding(8.dp),
         )
         Text(
             text = stringResource(R.string.transaction_failed),
@@ -119,38 +119,47 @@ fun TransactionErrorScreen(
         )
 
         Spacer(modifier = Modifier.weight(1f))
-        TextField(
-            value = email,
-            onValueChange = { email = it },
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 0.dp),
-            label = { Text(stringResource(R.string.digital_receipt_input_label), style = MaterialTheme.typography.titleSmall) },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        )
-        Button(
-            modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 3.dp),
-            contentPadding = PaddingValues(8.dp),
-            onClick = { onSendDigitalReceipt(email) },
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.widthIn(0.dp, 400.dp),
         ) {
-            if (state.sendingEmail) {
-                CircularProgressIndicator(
-                    color = Color.White,
-                )
-            } else {
-                Text(text = stringResource(id = R.string.send_digital_receipt_button), style = MaterialTheme.typography.bodyMedium)
+            TextField(
+                value = email,
+                onValueChange = { email = it },
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 0.dp),
+                label = { Text(stringResource(R.string.digital_receipt_input_label), style = MaterialTheme.typography.titleSmall) },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            )
+            Button(
+                modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 3.dp),
+                contentPadding = PaddingValues(8.dp),
+                onClick = { onSendDigitalReceipt(email) },
+            ) {
+                if (state.sendingEmail) {
+                    CircularProgressIndicator(
+                        color = Color.White,
+                    )
+                } else {
+                    Text(
+                        text = stringResource(id = R.string.send_digital_receipt_button),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
             }
-        }
-        Button(
-            onClick = onDone,
-            contentPadding = PaddingValues(8.dp),
-            modifier =
+            Button(
+                onClick = onDone,
+                contentPadding = PaddingValues(8.dp),
+                modifier =
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 8.dp),
-        ) {
-            Text(stringResource(R.string.close), style = MaterialTheme.typography.bodyMedium)
+            ) {
+                Text(stringResource(R.string.close), style = MaterialTheme.typography.bodyMedium)
+            }
         }
         Spacer(modifier = Modifier.height(12.dp))
     }

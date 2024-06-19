@@ -11,18 +11,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -33,9 +34,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tyro.taptopay.sdk.api.TapToPaySdk
+import com.tyro.taptopay.sdk.api.TyroEnvStub
 import com.tyro.taptopay.sdk.api.data.request.TransactionType
 import com.tyro.taptopay.sdk.demo.R
 import com.tyro.taptopay.sdk.demo.SdkDemoViewModel
@@ -54,17 +58,17 @@ fun RowScope.AmountKey(
 ) {
     Button(
         modifier =
-            Modifier
-                .height(70.dp)
-                .weight(1f)
-                .padding(6.dp),
+        Modifier
+            .height(70.dp)
+            .weight(1f)
+            .padding(6.dp),
         onClick = onClick,
         shape = RoundedCornerShape(50),
         colors =
-            ButtonDefaults.buttonColors(
-                containerColor = tyroDemoGrey,
-                contentColor = tyroDemoBlack,
-            ),
+        ButtonDefaults.buttonColors(
+            containerColor = tyroDemoGrey,
+            contentColor = tyroDemoBlack,
+        ),
     ) {
         imageVector?.let {
             Icon(
@@ -85,9 +89,9 @@ fun RowScope.AmountKey(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AmountScreen(
-    viewModel: SdkDemoViewModel = viewModel(),
     onNext: (String) -> Unit,
     onCancel: () -> Unit,
+    viewModel: SdkDemoViewModel = viewModel(),
 ) {
     val state = viewModel.state.collectAsState().value
 
@@ -99,12 +103,12 @@ fun AmountScreen(
     ) {
         Scaffold(
             topBar = {
-                TopAppBar(
+                CenterAlignedTopAppBar(
                     colors =
-                        topAppBarColors(
-                            containerColor = Color.Transparent,
-                            titleContentColor = tyroDemoBlack,
-                        ),
+                    topAppBarColors(
+                        containerColor = Color.Transparent,
+                        titleContentColor = tyroDemoBlack,
+                    ),
                     title = {
                         Text(stringResource(R.string.tap_to_pay_sdk_demo), style = typography.bodyLarge)
                     },
@@ -122,18 +126,18 @@ fun AmountScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(padding),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(padding),
             ) {
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
                     text =
-                        when (state.transactionType) {
-                            TransactionType.PURCHASE -> stringResource(R.string.purchase)
-                            TransactionType.REFUND -> stringResource(R.string.refund)
-                        },
+                    when (state.transactionType) {
+                        TransactionType.PURCHASE -> stringResource(R.string.purchase)
+                        TransactionType.REFUND -> stringResource(R.string.refund)
+                    },
                     style = typography.bodyLarge,
                 )
                 Text(
@@ -141,17 +145,17 @@ fun AmountScreen(
                     style = typography.bodyLarge,
                     fontSize = 48.sp,
                     color =
-                        if (!state.amountString.isValidAmount()) {
-                            tyroDemoDarkGrey
-                        } else {
-                            tyroDemoBlack
-                        },
+                    if (!state.amountString.isValid()) {
+                        tyroDemoDarkGrey
+                    } else {
+                        tyroDemoBlack
+                    },
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                Column {
-                    Row(Modifier.fillMaxWidth()) {
+                Column(Modifier.widthIn(0.dp, 400.dp)) {
+                    Row(Modifier) {
                         AmountKey("1") { viewModel.onAmountKeyPress("1") }
                         AmountKey("2") { viewModel.onAmountKeyPress("2") }
                         AmountKey("3") { viewModel.onAmountKeyPress("3") }
@@ -181,17 +185,17 @@ fun AmountScreen(
                             viewModel.onAmountClearLast()
                         }
                     }
-                }
-                Button(
-                    { onNext(state.amountString) },
-                    contentPadding = PaddingValues(18.dp),
-                    modifier =
+                    Button(
+                        { onNext(state.amountString) },
+                        contentPadding = PaddingValues(18.dp),
+                        modifier =
                         Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 24.dp, vertical = 8.dp),
-                    enabled = state.amountString.isValidAmount(),
-                ) {
-                    Text(stringResource(R.string.proceed), style = typography.bodyMedium)
+                            .padding(horizontal = 8.dp, vertical = 8.dp),
+                        enabled = state.amountString.isValid(),
+                    ) {
+                        Text(stringResource(R.string.proceed), style = typography.bodyMedium)
+                    }
                 }
                 Spacer(modifier = Modifier.height(12.dp))
             }
@@ -199,8 +203,19 @@ fun AmountScreen(
     }
 }
 
-private fun String.isValidAmount(): Boolean {
-    // sdk will throw if value is not between 0 - 100,000,000
-    val amountInCents = this.replace("$", "").replace(".", "").toInt();
-    return (amountInCents in 1..9_999_999);
+@Preview
+@Composable
+fun AmountScreenPreview() {
+    return AmountScreen(onNext = {}, onCancel = {}, viewModel = SdkDemoViewModel(TapToPaySdk.Companion.createInstance(TyroEnvStub())))
+}
+
+@Preview(device = "spec:width=911dp,height=600dp,dpi=320,isRound=false,chinSize=0dp,orientation=landscape")
+@Composable
+fun AmountScreenPreviewLandscape() {
+    return AmountScreen(onNext = {}, onCancel = {}, viewModel = SdkDemoViewModel(TapToPaySdk.Companion.createInstance(TyroEnvStub())))
+}
+
+private fun String.isValid(): Boolean {
+    val amountInCents = this.replace("$", "").replace(".", "").toInt()
+    return (amountInCents in 1..9_999_999)
 }
