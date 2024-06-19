@@ -50,6 +50,6 @@ class SdkDemoConnectionProvider(engine: HttpClientEngine = CIO.create()) : Conne
         // create the reader id and set it here for demo
         // only one reader can be used on one device any a time otherwise transactions will fail
         // your app would usually retrieve the reader id from your server
-        const val UPDATE__THIS__DEMO_READER_ID = "bf25e679-ee58-4574-9d1f-4a0ec1cb99bb"
+        const val UPDATE__THIS__DEMO_READER_ID = "<add-your-reader-id-here>"
     }
 }

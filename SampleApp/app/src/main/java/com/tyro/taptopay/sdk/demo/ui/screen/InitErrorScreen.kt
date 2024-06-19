@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
@@ -39,11 +40,10 @@ import com.tyro.taptopay.sdk.demo.ui.theme.tyroDemoBlack
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InitErrorScreen(
+    onClose: () -> Unit = {},
     viewModel: SdkDemoViewModel = viewModel(),
-    onClose: () -> Unit,
 ) {
     val state = viewModel.state.collectAsState().value
-
     BackHandler(onBack = { onClose() })
     Column(
         verticalArrangement = Arrangement.Center,
@@ -55,16 +55,16 @@ fun InitErrorScreen(
                 painter = painterResource(id = R.drawable.tyro_logo_dark),
                 contentDescription = stringResource(R.string.content_desc_tyro_logo),
                 modifier =
-                    Modifier
-                        .size(120.dp)
-                        .align(Alignment.Center),
+                Modifier
+                    .size(120.dp)
+                    .align(Alignment.Center),
             )
             TopAppBar(
                 colors =
-                    TopAppBarDefaults.mediumTopAppBarColors(
-                        containerColor = Color.Transparent,
-                        navigationIconContentColor = tyroDemoBlack,
-                    ),
+                TopAppBarDefaults.mediumTopAppBarColors(
+                    containerColor = Color.Transparent,
+                    navigationIconContentColor = tyroDemoBlack,
+                ),
                 title = { },
                 navigationIcon = {
                     IconButton(onClick = onClose) {
@@ -82,9 +82,9 @@ fun InitErrorScreen(
             painter = painterResource(id = R.drawable.ic_warning_80dp),
             contentDescription = stringResource(R.string.content_desc_error),
             modifier =
-                Modifier
-                    .size(160.dp)
-                    .padding(8.dp),
+            Modifier
+                .size(160.dp)
+                .padding(8.dp),
         )
         Text(
             text = stringResource(R.string.initialisation_failed),
@@ -98,16 +98,23 @@ fun InitErrorScreen(
             style = MaterialTheme.typography.bodyMedium,
         )
         Spacer(modifier = Modifier.weight(1f))
-
-        Button(
-            onClick = onClose,
-            contentPadding = PaddingValues(18.dp),
-            modifier =
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.widthIn(0.dp, 400.dp),
+        ) {
+            Button(
+                onClick = onClose,
+                contentPadding = PaddingValues(18.dp),
+                modifier =
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 8.dp),
-        ) {
-            Text(text = stringResource(R.string.close), style = MaterialTheme.typography.bodyMedium)
+            ) {
+                Text(
+                    text = stringResource(R.string.close),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
         }
         Spacer(modifier = Modifier.height(12.dp))
     }
