@@ -165,7 +165,7 @@ class SdkDemoViewModel(private val tapToPaySdk: TapToPaySdk) : ViewModel() {
             val amount = state.value.amountAuthorised!!.toBigDecimal().divide(BigDecimal("100"))
             "$%.${2}f".format(amount)
         } else {
-            val netAmount = state.value.amountString.replace("$", "").replace(".", "").toBigDecimal()
+            val netAmount = state.value.amountString.replace("$", "").toBigDecimal()
             val total = netAmount + (surcharge ?: BigDecimal("0.0"))
             "$%.${2}f".format(total)
         }
