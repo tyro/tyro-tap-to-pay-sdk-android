@@ -26,23 +26,20 @@ class SdkDemoApplication : Application() {
                 "stub" -> TyroEnvStub()
                 "dev" ->
                     TyroEnvDev(
-                        posInfo = POS_INFO,
                         connectionProvider = SdkDemoConnectionProvider(),
                     )
                 else ->
                     TyroEnvProd(
-                        posInfo = POS_INFO,
                         connectionProvider = SdkDemoConnectionProvider(),
                     )
             }
-        return createInstance(tyroEnv, applicationContext, TyroOptions(TyroScreenOrientation.PORTRAIT))
+        return createInstance(tyroEnv, applicationContext, TyroOptions(TyroScreenOrientation.PORTRAIT)).apply {
+            setPosInfo(PosInfo(
+                posName = "Demo",
+                posVendor = "Tyro Payments Example App",
+                posVersion = "1.0",
+                siteReference = "Sydney",
+            ))
+        }
     }
 }
-
-val POS_INFO =
-    PosInfo(
-        posName = "Demo",
-        posVendor = "Tyro Payments Example App",
-        posVersion = "1.0",
-        siteReference = "Sydney",
-    )
