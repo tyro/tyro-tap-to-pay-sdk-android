@@ -13,6 +13,8 @@ import com.tyro.taptopay.sdk.api.data.PosInfo
 
 class SdkDemoApplication : Application() {
     lateinit var tapToPaySDK: TapToPaySdk
+    val connectionProvider = SdkDemoConnectionProvider()
+
 
     override fun onCreate() {
         super.onCreate()
@@ -26,11 +28,11 @@ class SdkDemoApplication : Application() {
                 "stub" -> TyroEnvStub()
                 "dev" ->
                     TyroEnvDev(
-                        connectionProvider = SdkDemoConnectionProvider(),
+                        connectionProvider = connectionProvider,
                     )
                 else ->
                     TyroEnvProd(
-                        connectionProvider = SdkDemoConnectionProvider(),
+                        connectionProvider = connectionProvider,
                     )
             }
         return createInstance(tyroEnv, applicationContext, TyroOptions(TyroScreenOrientation.PORTRAIT)).apply {

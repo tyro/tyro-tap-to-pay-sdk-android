@@ -15,6 +15,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 class SdkDemoConnectionProvider(engine: HttpClientEngine = CIO.create()) : ConnectionProvider {
+    lateinit var readerId: String
+
     private val client =
         HttpClient(engine) {
             install(ContentNegotiation) {
@@ -31,7 +33,7 @@ class SdkDemoConnectionProvider(engine: HttpClientEngine = CIO.create()) : Conne
     override suspend fun createConnection(): String {
         return client.post(UPDATE__THIS__CONNECTION_SECRET_ENDPOINT_URL) {
             contentType(ContentType.Application.Json)
-            setBody(DemoConnectionRequestBody(UPDATE__THIS__DEMO_READER_ID))
+            setBody(DemoConnectionRequestBody(readerId))
         }.body<DemoConnectionResponse>().connectionSecret
     }
 
@@ -46,10 +48,5 @@ class SdkDemoConnectionProvider(engine: HttpClientEngine = CIO.create()) : Conne
         // create an endpoint on your server to generate the connection secret
         const val UPDATE__THIS__CONNECTION_SECRET_ENDPOINT_URL = "https://api.tyro.com/connect/tap-to-pay/demo/connections"
 
-        // TODO
-        // create the reader id and set it here for demo
-        // only one reader can be used on one device any a time otherwise transactions will fail
-        // your app would usually retrieve the reader id from your server
-        const val UPDATE__THIS__DEMO_READER_ID = "<add-your-reader-id-here>"
     }
 }

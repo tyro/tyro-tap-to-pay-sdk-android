@@ -90,6 +90,7 @@ dependencies {
     implementation("com.airbnb.android:lottie:6.0.1")
     implementation("com.airbnb.android:lottie-compose:6.0.1")
 
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")

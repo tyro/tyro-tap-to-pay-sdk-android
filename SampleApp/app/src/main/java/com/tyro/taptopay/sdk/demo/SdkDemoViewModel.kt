@@ -16,6 +16,7 @@ import com.tyro.taptopay.sdk.demo.SdkDemoScreen.AMOUNT
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.HOME
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.INIT_ERROR
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.LOADING
+import com.tyro.taptopay.sdk.demo.SdkDemoScreen.READER_ID_INPUT
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.SUCCESS
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.TRANSACTION_ERROR
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +31,19 @@ class SdkDemoViewModel(private val tapToPaySdk: TapToPaySdk) : ViewModel() {
 
     fun showLoadingScreen() {
         _state.update { it.copy(screen = LOADING) }
+    }
+
+    fun showReaderIdInputScreen() {
+        _state.update { it.copy(screen = READER_ID_INPUT) }
+    }
+
+    fun initTapToPaySdk(activity: ComponentActivity) {
+        // initialise the Tyro Tap to Pay SDK
+        // this could take some time, so show a progress spinner
+        showLoadingScreen()
+        tapToPaySdk.init(activity) { initResult ->
+            onInitResult(initResult)
+        }
     }
 
     fun onInitResult(initResult: InitResult) {
@@ -64,7 +78,7 @@ class SdkDemoViewModel(private val tapToPaySdk: TapToPaySdk) : ViewModel() {
         }
     }
 
-    fun updateAdminSettings(activity: ComponentActivity,) {
+    fun updateAdminSettings(activity: ComponentActivity) {
         tapToPaySdk.updateAdminSettings(activity)
     }
 

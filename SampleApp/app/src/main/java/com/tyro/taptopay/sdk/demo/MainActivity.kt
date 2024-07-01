@@ -15,19 +15,23 @@ import com.tyro.taptopay.sdk.demo.SdkDemoScreen.AMOUNT
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.HOME
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.INIT_ERROR
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.LOADING
+import com.tyro.taptopay.sdk.demo.SdkDemoScreen.READER_ID_INPUT
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.SUCCESS
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.TRANSACTION_ERROR
 import com.tyro.taptopay.sdk.demo.ui.screen.AmountScreen
 import com.tyro.taptopay.sdk.demo.ui.screen.HomeScreen
 import com.tyro.taptopay.sdk.demo.ui.screen.InitErrorScreen
 import com.tyro.taptopay.sdk.demo.ui.screen.LoadingScreen
+import com.tyro.taptopay.sdk.demo.ui.screen.ReaderIdInputScreen
 import com.tyro.taptopay.sdk.demo.ui.screen.SuccessScreen
 import com.tyro.taptopay.sdk.demo.ui.screen.TransactionErrorScreen
 import com.tyro.taptopay.sdk.demo.ui.theme.SdkDemoTheme
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val viewModel: SdkDemoViewModel by viewModels { SdkDemoViewModel.Factory }
+    private lateinit var dataStoreManager: DataStoreManager
 
     private val tapToPaySdk: TapToPaySdk
         get() = (application as SdkDemoApplication).tapToPaySDK
@@ -37,17 +41,23 @@ class MainActivity : ComponentActivity() {
         setContent {
             TapToPaySdkDemoApp(viewModel)
         }
+        dataStoreManager = DataStoreManager(this@MainActivity.applicationContext)
+
+        viewModel.showLoadingScreen()
+        viewModel.showReaderIdInputScreen()
 
         // register a handler for transaction results
         tapToPaySdk.registerTransactionResultHandler(this) { transactionResult ->
             viewModel.onTransactionResult(transactionResult)
         }
 
-        // initialise the Tyro Tap to Pay SDK
-        // this could take some time, so show a progress spinner
-        viewModel.showLoadingScreen()
-        tapToPaySdk.init(this) { initResult ->
-            viewModel.onInitResult(initResult)
+    }
+
+    private fun initSdkWithReaderId(readerId: String) {
+        (application as SdkDemoApplication).connectionProvider.readerId = readerId
+        viewModel.initTapToPaySdk(this@MainActivity)
+        lifecycleScope.launch(Dispatchers.IO) {
+            dataStoreManager.storeReaderId(readerId)
         }
     }
 
@@ -80,6 +90,13 @@ class MainActivity : ComponentActivity() {
             ) {
                 when (state.screen) {
                     LOADING -> LoadingScreen()
+
+                    READER_ID_INPUT ->
+                        ReaderIdInputScreen(
+                            onConfirmReaderId = { readerId ->
+                                initSdkWithReaderId(readerId)
+                            },
+                        )
 
                     HOME ->
                         HomeScreen(
