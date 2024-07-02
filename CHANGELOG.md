@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.1] - 2024-07-02
+
+### Fixed
+- Fixes screen size check for tablets when landscape orientation is set.
+
 
 ## [1.0.0] - 2024-06-24
 BREAKING change to TyroEnv classes. PosInfo can no longer be passed to the constructor, use sdk.setPosInfo() or set in the TransactionRequest instead.
