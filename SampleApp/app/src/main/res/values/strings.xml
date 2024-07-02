@@ -5,9 +5,12 @@
     <string name="purchase">Purchase</string>
     <string name="refund">Refund</string>
     <string name="proceed">Proceed</string>
+    <string name="confirm">Confirm</string>
     <string name="close">Close</string>
     <string name="approved">Approved</string>
     <string name="done">Done</string>
+    <string name="input_reader_id_msg">Enter your Reader ID below </string>
+    <string name="input_reader_id_label">Reader ID</string>
     <string name="surcharge_applied">Include surcharge: %s </string>
     <string name="initialisation_failed">Initialisation failed</string>
     <string name="transaction_failed">Transaction failed</string>

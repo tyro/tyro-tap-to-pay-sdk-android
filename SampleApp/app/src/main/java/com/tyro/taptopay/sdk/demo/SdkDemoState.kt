@@ -20,4 +20,5 @@ enum class SdkDemoScreen {
     SUCCESS,
     TRANSACTION_ERROR,
     INIT_ERROR,
+    READER_ID_INPUT,
 }
