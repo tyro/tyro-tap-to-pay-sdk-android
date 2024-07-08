@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.2] - 2024-07-08
+
+### Added
+- Adds the production configuration.
+- Adds crash reporting for SDK related crashes.
+### Changed
+- Improvements to use newer Android APIs.
+- Removes deprecated functions
+
 ## [1.0.1] - 2024-07-02
 
 ### Fixed
