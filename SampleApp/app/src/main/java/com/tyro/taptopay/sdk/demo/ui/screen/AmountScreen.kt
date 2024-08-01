@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -206,13 +207,14 @@ fun AmountScreen(
 @Preview
 @Composable
 fun AmountScreenPreview() {
-    return AmountScreen(onNext = {}, onCancel = {}, viewModel = SdkDemoViewModel(TapToPaySdk.Companion.createInstance(TyroEnvStub())))
+    return AmountScreen(onNext = {}, onCancel = {}, viewModel = SdkDemoViewModel(TapToPaySdk.Companion.createInstance(TyroEnvStub(),
+        LocalContext.current,)))
 }
 
 @Preview(device = "spec:width=911dp,height=600dp,dpi=320,isRound=false,chinSize=0dp,orientation=landscape")
 @Composable
 fun AmountScreenPreviewLandscape() {
-    return AmountScreen(onNext = {}, onCancel = {}, viewModel = SdkDemoViewModel(TapToPaySdk.Companion.createInstance(TyroEnvStub())))
+    return AmountScreen(onNext = {}, onCancel = {}, viewModel = SdkDemoViewModel(TapToPaySdk.Companion.createInstance(TyroEnvStub(),LocalContext.current,)))
 }
 
 private fun String.isValid(): Boolean {
