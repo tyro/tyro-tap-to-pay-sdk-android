@@ -25,9 +25,9 @@ android {
     signingConfigs {
         create("default") {
             keyAlias = "key0" // DO NOT CHANGE THIS if using sampleappkeystore.jks
-            keyPassword = "password" // UPDATE THIS if using sampleappkeystore.jks
+            keyPassword = "password" // UPDATE THIS with the password provided by Tyro if using sampleappkeystore.jks
             storeFile = file("update_this_with_your_own.jks") // UPDATE THIS if using sampleappkeystore.jks
-            storePassword = "password" // UPDATE THIS if using sampleappkeystore.jks
+            storePassword = "password" // UPDATE THIS with the password provided by Tyro if using sampleappkeystore.jks
         }
     }
 
