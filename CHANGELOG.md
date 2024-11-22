@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.5] - 2024-11-22
+
+### Changed
+- Upgraded to latest material3 version (androidx.compose.material3:material3:1.3.1)
+
 ## [1.0.5] - 2024-11-19
 
 ### Fixed
