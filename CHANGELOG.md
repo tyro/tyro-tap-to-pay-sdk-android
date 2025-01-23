@@ -5,7 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.0.5] - 2024-11-22
+## [2.0.0] - 2025-01-24
+
+### Added
+- Added support for **Light**, **Dark**, and **System Default** themes
+- Added new option fields:
+    - `themeMode`: Allows users to set the desired theme (Light/Dark/System)
+    - `hapticFeedbackEnabled`: Enables or disables haptic feedback for the SDK
+- Added a new function that enables users to dynamically toggle haptic feedback on or off during runtime
+### Changed
+- Renamed all instances of "Refund Password" to "Refund Passcode"
+- Redesigned the UI for Admin Settings and Refund Passcode screens
+- Updated SDK to Kotlin 2.0.21
+- Updated dependency: Ktor 3.0.3
+
+## [1.0.6] - 2024-11-22
 
 ### Changed
 - Upgraded to latest material3 version (androidx.compose.material3:material3:1.3.1)
