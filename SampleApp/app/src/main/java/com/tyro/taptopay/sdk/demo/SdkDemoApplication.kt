@@ -9,6 +9,7 @@ import com.tyro.taptopay.sdk.api.TyroEnvProd
 import com.tyro.taptopay.sdk.api.TyroEnvStub
 import com.tyro.taptopay.sdk.api.TyroOptions
 import com.tyro.taptopay.sdk.api.TyroScreenOrientation
+import com.tyro.taptopay.sdk.api.TyroThemeMode
 import com.tyro.taptopay.sdk.api.data.PosInfo
 
 class SdkDemoApplication : Application() {
@@ -35,7 +36,11 @@ class SdkDemoApplication : Application() {
                         connectionProvider = connectionProvider,
                     )
             }
-        return createInstance(tyroEnv, applicationContext, TyroOptions(TyroScreenOrientation.PORTRAIT)).apply {
+        return createInstance(
+            tyroEnv,
+            applicationContext,
+            TyroOptions(TyroScreenOrientation.PORTRAIT, TyroThemeMode.LIGHT, hapticFeedbackEnabled = true)
+        ).apply {
             setPosInfo(PosInfo(
                 posName = "Demo",
                 posVendor = "Tyro Payments Example App",
