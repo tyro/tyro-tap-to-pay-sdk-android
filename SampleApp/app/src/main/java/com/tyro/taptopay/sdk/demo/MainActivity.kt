@@ -107,7 +107,13 @@ class MainActivity : ComponentActivity() {
 
                     AMOUNT ->
                         AmountScreen(
-                            onNext = { s -> viewModel.startTransaction(this, s) },
+                            onNext = { formattedAmount ->
+                                try {
+                                    viewModel.startTransaction(this, formattedAmount)
+                                } catch (e: SecurityException) {
+                                    Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+                                }
+                            },
                             onCancel = { viewModel.resetToHome() },
                         )
 
