@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.1] - 2025-04-08
+
+### Added
+- Added security checks for split screen, screen capturing and screen sharing in presentation mode
+### Changed
+- Enabled edge-to-edge display
+- Changed haptic feedback vibration pattern when presented card is read successfully
+### Fixed
+- Fixed known UI issues
+
 ## [2.0.0] - 2025-01-24
 
 ### Added
