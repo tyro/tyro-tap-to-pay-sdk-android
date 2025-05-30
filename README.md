@@ -50,23 +50,21 @@ dependencyResolutionManagement {
 
 #### Kotlin
 ``` kotlin
-val tyroSdkVersion by extra("<VERSION>")
 
 dependencies {
     // ...
-    debugImplementation("com.tyro:tyro-tap-to-pay-sdk-debug:$tyroSdkVersion")
-    releaseImplementation("com.tyro:tyro-tap-to-pay-sdk-release:$tyroSdkVersion")
+    debugImplementation("com.tyro:tyro-tap-to-pay-sdk-debug:latest.release")
+    releaseImplementation("com.tyro:tyro-tap-to-pay-sdk-release:latest.release")
 }
 ```
 
 #### Groovy
 ``` groovy
-ext { set('tyroSdkVersion', '<VERSION>') }
 
 dependencies {
     // ...
-    debugImplementation "com.tyro:tyro-tap-to-pay-sdk-debug:${tyroSdkVersion}"
-    releaseImplementation "com.tyro:tyro-tap-to-pay-sdk-release:${tyroSdkVersion}"
+    debugImplementation "com.tyro:tyro-tap-to-pay-sdk-debug:latest.release"
+    releaseImplementation "com.tyro:tyro-tap-to-pay-sdk-release:latest.release"
 }
 ```
 
