@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.2] - 2025-06-17
+
+### Fixed
+- Fixed known UI issue on transaction flow, allowing for seamless full-screen appearance
+
 ## [2.0.1] - 2025-04-08
 
 ### Added
