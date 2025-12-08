@@ -51,7 +51,7 @@ fun HomeScreen(
       contentDescription = stringResource(R.string.content_desc_tyro_logo),
       modifier = Modifier.size(80.dp),
 
-      )
+    )
     Text(stringResource(R.string.tap_to_pay_sdk_demo), style = typography.bodyLarge)
     Text(
       stringResource(R.string.current_reader_id, currentReaderId),
