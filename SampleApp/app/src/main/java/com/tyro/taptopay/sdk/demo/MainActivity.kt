@@ -16,6 +16,7 @@ import com.tyro.taptopay.sdk.demo.SdkDemoScreen.HOME
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.INIT_ERROR
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.LOADING
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.READER_ID_INPUT
+import com.tyro.taptopay.sdk.demo.SdkDemoScreen.STORE_DEMO
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.SUCCESS
 import com.tyro.taptopay.sdk.demo.SdkDemoScreen.TRANSACTION_ERROR
 import com.tyro.taptopay.sdk.demo.ui.screen.AmountScreen
@@ -23,118 +24,144 @@ import com.tyro.taptopay.sdk.demo.ui.screen.HomeScreen
 import com.tyro.taptopay.sdk.demo.ui.screen.InitErrorScreen
 import com.tyro.taptopay.sdk.demo.ui.screen.LoadingScreen
 import com.tyro.taptopay.sdk.demo.ui.screen.ReaderIdInputScreen
+import com.tyro.taptopay.sdk.demo.ui.screen.StoreDemoScreen
 import com.tyro.taptopay.sdk.demo.ui.screen.SuccessScreen
 import com.tyro.taptopay.sdk.demo.ui.screen.TransactionErrorScreen
 import com.tyro.taptopay.sdk.demo.ui.theme.SdkDemoTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.logging.Logger
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: SdkDemoViewModel by viewModels { SdkDemoViewModel.Factory }
-    private lateinit var dataStoreManager: DataStoreManager
+  private val viewModel: SdkDemoViewModel by viewModels { SdkDemoViewModel.Factory }
+  private lateinit var dataStoreManager: DataStoreManager
+  private val tapToPaySdk = TapToPaySdk.instance
 
-    private val tapToPaySdk: TapToPaySdk
-        get() = (application as SdkDemoApplication).tapToPaySDK
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            TapToPaySdkDemoApp(viewModel)
-        }
-        dataStoreManager = DataStoreManager(this@MainActivity.applicationContext)
-
-        viewModel.showLoadingScreen()
-        viewModel.showReaderIdInputScreen()
-
-        // register a handler for transaction results
-        tapToPaySdk.registerTransactionResultHandler(this) { transactionResult ->
-            viewModel.onTransactionResult(transactionResult)
-        }
-
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContent {
+      TapToPaySdkDemoApp(viewModel)
     }
+    dataStoreManager = DataStoreManager(this@MainActivity.applicationContext)
 
-    private fun initSdkWithReaderId(readerId: String) {
-        (application as SdkDemoApplication).connectionProvider.readerId = readerId
-        viewModel.initTapToPaySdk(this@MainActivity)
-        lifecycleScope.launch(Dispatchers.IO) {
-            dataStoreManager.storeReaderId(readerId)
-        }
+    viewModel.showLoadingScreen()
+    viewModel.showReaderIdInputScreen()
+
+    tapToPaySdk.registerTransactionResultHandler(this) { transactionResult ->
+      Logger.getAnonymousLogger().info(
+        "Transaction result from app: ${transactionResult.status} ${transactionResult.detail} ${transactionResult.errorMessage}",
+      )
+      viewModel.onTransactionResult(transactionResult)
     }
+  }
 
-    private fun sendDigitalReceipt(email: String) {
-        lifecycleScope.launch {
-            // Note this will not work on the sandbox environment
-            val emailQueued = viewModel.sendDigitalReceipt(email)
-            Toast.makeText(
-                applicationContext,
-                if (emailQueued) {
-                    getText(
-                        R.string.digital_receipt_success_msg,
-                    )
-                } else {
-                    getText(R.string.digital_receipt_failed_msg)
-                },
-                Toast.LENGTH_SHORT,
-            ).show()
-        }
+  private fun initSdkWithReaderId(readerId: String) {
+    (application as SdkDemoApplication).connectionProvider.readerId = readerId
+    viewModel.initTapToPaySdk(this@MainActivity)
+    lifecycleScope.launch(Dispatchers.IO) {
+      dataStoreManager.storeReaderId(readerId)
     }
+  }
 
+  private fun sendDigitalReceipt(email: String) {
+    lifecycleScope.launch {
+      // Note digital receipt will not work on the sandbox environment
+      val emailQueued = viewModel.sendDigitalReceipt(email)
+      Toast.makeText(
+        applicationContext,
+        if (emailQueued) {
+          getText(
+            R.string.digital_receipt_success_msg,
+          )
+        } else {
+          getText(R.string.digital_receipt_failed_msg)
+        },
+        Toast.LENGTH_SHORT,
+      ).show()
+    }
+  }
 
-    @Composable
-    fun TapToPaySdkDemoApp(viewModel: SdkDemoViewModel) {
-        val state = viewModel.state.collectAsState().value
+  @Composable
+  fun TapToPaySdkDemoApp(viewModel: SdkDemoViewModel) {
+    val state = viewModel.state.collectAsState().value
 
-        SdkDemoTheme {
-            Surface(
-                color = MaterialTheme.colorScheme.background,
-            ) {
-                when (state.screen) {
-                    LOADING -> LoadingScreen()
+    SdkDemoTheme {
+      Surface(
+        color = MaterialTheme.colorScheme.background,
+      ) {
+        when (state.screen) {
+          LOADING -> LoadingScreen()
 
-                    READER_ID_INPUT ->
-                        ReaderIdInputScreen(
-                            onConfirmReaderId = { readerId ->
-                                initSdkWithReaderId(readerId)
-                            },
-                        )
+          READER_ID_INPUT ->
+            ReaderIdInputScreen(
+              sdkVersion = tapToPaySdk.getSdkVersion(),
+              onConfirmReaderId = { readerId ->
+                initSdkWithReaderId(readerId)
+              },
+            )
 
-                    HOME ->
-                        HomeScreen(
-                            onSettings = {viewModel.updateAdminSettings(this)},
-                            onPurchase = { viewModel.beginPurchaseFlow() },
-                            onRefund = { viewModel.beginRefundFlow() },
-                        )
-
-                    AMOUNT ->
-                        AmountScreen(
-                            onNext = { formattedAmount ->
-                                try {
-                                    viewModel.startTransaction(this, formattedAmount)
-                                } catch (e: SecurityException) {
-                                    Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
-                                }
-                            },
-                            onCancel = { viewModel.resetToHome() },
-                        )
-
-                    SUCCESS ->
-                        SuccessScreen(
-                            onDone = { viewModel.resetToHome() },
-                            onSendDigitalReceipt = { email -> sendDigitalReceipt(email) },
-                        )
-
-                    TRANSACTION_ERROR ->
-                        TransactionErrorScreen(
-                            onDone = { viewModel.resetToHome() },
-                            onSendDigitalReceipt = { email -> sendDigitalReceipt(email) },
-                        )
-
-                    INIT_ERROR ->
-                        InitErrorScreen(
-                            onClose = { this.finish() },
-                        )
+          HOME ->
+            HomeScreen(
+              sdkVersion = tapToPaySdk.getSdkVersion(),
+              onSettings = {
+                try {
+                  viewModel.updateAdminSettings(this)
+                } catch (e: SecurityException) {
+                  Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
                 }
-            }
+              },
+              onPurchase = { viewModel.beginPurchaseFlow() },
+              onRefund = { viewModel.beginRefundFlow() },
+              onStoreDemo = { viewModel.storeDemo() },
+            )
+
+          AMOUNT ->
+            AmountScreen(
+              onNext = { formattedAmount ->
+                try {
+                  viewModel.startTransaction(this, formattedAmount)
+                } catch (e: SecurityException) {
+                  Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+                }
+              },
+              onCancel = { viewModel.resetToHome() },
+            )
+
+          SUCCESS ->
+            SuccessScreen(
+              onDone = { viewModel.resetToHome() },
+              onSendDigitalReceipt = { email -> sendDigitalReceipt(email) },
+            )
+
+          TRANSACTION_ERROR ->
+            TransactionErrorScreen(
+              onDone = { viewModel.resetToHome() },
+              onSendDigitalReceipt = { email -> sendDigitalReceipt(email) },
+            )
+
+          INIT_ERROR ->
+            InitErrorScreen(
+              onClose = { this.finish() },
+            )
+
+          STORE_DEMO ->
+            StoreDemoScreen(
+              onAddClicked = { product -> viewModel.incrementTotal(product.amount) },
+              onPayClicked = {
+                try {
+                  viewModel.startTransaction(
+                    this,
+                    "$%.${2}f".format(viewModel.state.value.demoStoreTotal),
+                  )
+                } catch (e: SecurityException) {
+                  Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+                }
+              },
+              onResetClicked = { viewModel.resetTotal() },
+              onBackClicked = { viewModel.resetToHome() },
+            )
         }
+      }
     }
+  }
 }

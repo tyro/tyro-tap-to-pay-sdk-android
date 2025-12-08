@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0] - 2025-11-25
+
+### Changed
+
+- Updated upstream dependencies
+- The `tyroDebug` build type is no longer required
+
+### Added
+- Added support for configuring NFC tap indicator. See [Configure Tap to Pay UX Options](https://docs.connect.tyro.com/pos/embedded-payments/android/sdk/set-tap-to-pay-ux-options/) for details
+
+## [2.2.0-alpha01] - 2025-10-08
+
+### Added
+
+- Added audio feedback for successful card reads, card read failures, transaction failures, and
+  timeouts
+
 ## [2.1.0] - 2025-07-23
 
 ### Fixed
