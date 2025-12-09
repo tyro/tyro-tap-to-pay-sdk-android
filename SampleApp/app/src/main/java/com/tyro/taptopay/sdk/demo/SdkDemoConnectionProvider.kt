@@ -14,39 +14,32 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
-class SdkDemoConnectionProvider(engine: HttpClientEngine = CIO.create()) : ConnectionProvider {
-    lateinit var readerId: String
+class SdkDemoConnectionProvider(
+  private val connectionUrl: String,
+  engine: HttpClientEngine = CIO.create(),
+) : ConnectionProvider {
+  lateinit var readerId: String
 
-    private val client =
-        HttpClient(engine) {
-            install(ContentNegotiation) {
-                json(
-                    Json {
-                        ignoreUnknownKeys = true
-                        isLenient = true
-                    },
-                )
-            }
-        }
-
-    // update this to fetch your connection secret
-    override suspend fun createConnection(): String {
-        return client.post(UPDATE__THIS__CONNECTION_SECRET_ENDPOINT_URL) {
-            contentType(ContentType.Application.Json)
-            setBody(DemoConnectionRequestBody(readerId))
-        }.body<DemoConnectionResponse>().connectionSecret
+  private val client =
+    HttpClient(engine) {
+      install(ContentNegotiation) {
+        json(
+          Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+          },
+        )
+      }
     }
 
-    @Serializable
-    data class DemoConnectionRequestBody(val readerId: String)
+  override suspend fun createConnection(): String = client.post(connectionUrl) {
+    contentType(ContentType.Application.Json)
+    setBody(DemoConnectionRequestBody(readerId))
+  }.body<DemoConnectionResponse>().connectionSecret
 
-    @Serializable
-    data class DemoConnectionResponse(val connectionSecret: String)
+  @Serializable
+  data class DemoConnectionRequestBody(val readerId: String)
 
-    companion object {
-        // TODO
-        // create an endpoint on your server to generate the connection secret
-        const val UPDATE__THIS__CONNECTION_SECRET_ENDPOINT_URL = "https://api.tyro.com/connect/tap-to-pay/demo/connections"
-
-    }
+  @Serializable
+  data class DemoConnectionResponse(val connectionSecret: String)
 }

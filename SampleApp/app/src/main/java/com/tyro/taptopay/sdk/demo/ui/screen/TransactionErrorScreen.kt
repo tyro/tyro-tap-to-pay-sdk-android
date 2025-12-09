@@ -22,10 +22,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,7 +34,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -48,136 +47,140 @@ import com.tyro.taptopay.sdk.api.TapToPaySdk
 import com.tyro.taptopay.sdk.api.TyroEnvStub
 import com.tyro.taptopay.sdk.demo.R
 import com.tyro.taptopay.sdk.demo.SdkDemoViewModel
-import com.tyro.taptopay.sdk.demo.ui.theme.tyroDemoBlack
-import com.tyro.taptopay.sdk.demo.ui.theme.tyroDemoRed
+import com.tyro.taptopay.sdk.demo.ui.theme.SdkDemoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionErrorScreen(
-    onDone: () -> Unit,
-    onSendDigitalReceipt: (email: String) -> Unit,
-    viewModel: SdkDemoViewModel = viewModel(),
+  onDone: () -> Unit,
+  onSendDigitalReceipt: (email: String) -> Unit,
+  viewModel: SdkDemoViewModel = viewModel(),
 ) {
-    val state = viewModel.state.collectAsState().value
-    var email by remember { mutableStateOf("") }
-    BackHandler(onBack = { onDone() })
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        Box {
-            Image(
-                painter = painterResource(id = R.drawable.tyro_logo_dark),
-                contentDescription = stringResource(R.string.content_desc_tyro_logo),
-                modifier =
-                Modifier
-                    .size(120.dp)
-                    .align(Alignment.Center),
+  val state = viewModel.state.collectAsState().value
+  var email by remember { mutableStateOf("") }
+  BackHandler(onBack = { onDone() })
+  Column(
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally,
+    modifier = Modifier.fillMaxSize(),
+  ) {
+    Box {
+      Image(
+        painter = painterResource(id = R.drawable.tyro_logo_dark),
+        contentDescription = stringResource(R.string.content_desc_tyro_logo),
+        modifier =
+          Modifier
+            .size(80.dp)
+            .align(Alignment.Center),
+      )
+      TopAppBar(
+        title = { },
+        navigationIcon = {
+          IconButton(onClick = onDone) {
+            Icon(
+              imageVector = Icons.Default.Close,
+              contentDescription = stringResource(R.string.content_desc_close),
             )
-            TopAppBar(
-                colors =
-                TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = Color.Transparent,
-                    navigationIconContentColor = tyroDemoBlack,
-                ),
-                title = { },
-                navigationIcon = {
-                    IconButton(onClick = onDone) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = stringResource(R.string.content_desc_close),
-                        )
-                    }
-                },
-            )
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        Image(
-            painter = painterResource(id = R.drawable.ic_warning_80dp),
-            contentDescription = stringResource(R.string.content_desc_error),
-            modifier =
-            Modifier
-                .size(80.dp)
-                .padding(8.dp),
-        )
-        Text(
-            text = stringResource(R.string.transaction_failed),
-            color = tyroDemoBlack,
-            style = MaterialTheme.typography.bodyLarge,
-        )
-        Text(
-            text = state.errorMessage,
-            textAlign = TextAlign.Center,
-            color = tyroDemoBlack,
-            style = MaterialTheme.typography.bodyMedium,
-        )
-        Text(
-            text = viewModel.getTransactionAmount(),
-            color = tyroDemoRed,
-            fontSize = 32.sp,
-            style = MaterialTheme.typography.bodyMedium,
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.widthIn(0.dp, 400.dp),
-        ) {
-            TextField(
-                value = email,
-                onValueChange = { email = it },
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 0.dp),
-                label = { Text(stringResource(R.string.digital_receipt_input_label), style = MaterialTheme.typography.titleSmall) },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            )
-            Button(
-                modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 3.dp),
-                contentPadding = PaddingValues(8.dp),
-                onClick = { onSendDigitalReceipt(email) },
-            ) {
-                if (state.sendingEmail) {
-                    CircularProgressIndicator(
-                        color = Color.White,
-                    )
-                } else {
-                    Text(
-                        text = stringResource(id = R.string.send_digital_receipt_button),
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
-                }
-            }
-            Button(
-                onClick = onDone,
-                contentPadding = PaddingValues(8.dp),
-                modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 8.dp),
-            ) {
-                Text(stringResource(R.string.close), style = MaterialTheme.typography.bodyMedium)
-            }
-        }
-        Spacer(modifier = Modifier.height(12.dp))
+          }
+        },
+      )
     }
+    Spacer(modifier = Modifier.weight(1f))
+    Image(
+      painter = painterResource(id = R.drawable.ic_warning_80dp),
+      contentDescription = stringResource(R.string.content_desc_error),
+      modifier =
+        Modifier
+          .size(80.dp)
+          .padding(8.dp),
+    )
+    Text(
+      text = stringResource(R.string.transaction_failed),
+      style = MaterialTheme.typography.bodyLarge,
+    )
+    Text(
+      text = state.errorMessage,
+      textAlign = TextAlign.Center,
+      style = MaterialTheme.typography.bodyMedium,
+    )
+    Text(
+      text = viewModel.getTransactionAmount(),
+      color = MaterialTheme.colorScheme.error,
+      fontSize = 32.sp,
+      style = MaterialTheme.typography.bodyMedium,
+    )
+
+    Spacer(modifier = Modifier.weight(1f))
+
+    Column(
+      horizontalAlignment = Alignment.CenterHorizontally,
+      modifier = Modifier.widthIn(0.dp, 400.dp),
+    ) {
+      TextField(
+        value = email,
+        onValueChange = { email = it },
+        modifier =
+          Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 0.dp),
+        label = {
+          Text(
+            stringResource(R.string.digital_receipt_input_label),
+            style = MaterialTheme.typography.titleSmall,
+          )
+        },
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+      )
+      Button(
+        modifier =
+          Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 3.dp),
+        contentPadding = PaddingValues(8.dp),
+        onClick = { onSendDigitalReceipt(email) },
+      ) {
+        if (state.sendingEmail) {
+          CircularProgressIndicator(
+            color = MaterialTheme.colorScheme.onPrimary,
+          )
+        } else {
+          Text(
+            text = stringResource(id = R.string.send_digital_receipt_button),
+            style = MaterialTheme.typography.bodyMedium,
+          )
+        }
+      }
+      Button(
+        onClick = onDone,
+        contentPadding = PaddingValues(8.dp),
+        modifier =
+          Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 8.dp),
+      ) {
+        Text(stringResource(R.string.close), style = MaterialTheme.typography.bodyMedium)
+      }
+    }
+    Spacer(modifier = Modifier.height(12.dp))
+  }
 }
 
 @Preview
 @Composable
 fun TransactionErrorScreenPreview() {
-    return TransactionErrorScreen(
-        viewModel =
-        SdkDemoViewModel(
-            TapToPaySdk.createInstance(
-                TyroEnvStub(),
-                LocalContext.current,
-            ),
-        ),
+  SdkDemoTheme {
+    Surface {
+      TransactionErrorScreen(
         onDone = {},
         onSendDigitalReceipt = {},
-    )
+        viewModel =
+          SdkDemoViewModel(
+            TapToPaySdk.createInstance(
+              TyroEnvStub(),
+              LocalContext.current,
+            ),
+          ),
+      )
+    }
+  }
 }

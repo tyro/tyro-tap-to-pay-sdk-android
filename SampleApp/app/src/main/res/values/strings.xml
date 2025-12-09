@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">SDK Demo</string>
     <string name="tap_to_pay_sdk_demo">Tap to Pay SDK Demo</string>
+    <string name="build_config">App Version %s, SDK Version %s, AppId: %s, Build: %s</string>
+    <string name="store_demo">Store Demo</string>
     <string name="admin_settings">Admin Settings</string>
     <string name="purchase">Purchase</string>
     <string name="refund">Refund</string>
@@ -9,11 +11,16 @@
     <string name="close">Close</string>
     <string name="approved">Approved</string>
     <string name="done">Done</string>
+    <string name="current_reader_id">Current Reader ID:\n%s</string>
     <string name="input_reader_id_msg">Enter your Reader ID below </string>
     <string name="input_reader_id_label">Reader ID</string>
     <string name="surcharge_applied">Include surcharge: %s </string>
+    <string name="digital_receipt_input_label">Customer\'s Email</string>
+    <string name="send_digital_receipt_button">Send Digital Receipt</string>
     <string name="initialisation_failed">Initialisation failed</string>
     <string name="transaction_failed">Transaction failed</string>
+    <string name="digital_receipt_success_msg">Digital receipt will be sent</string>
+    <string name="digital_receipt_failed_msg">Digital receipt request failed</string>
 
     <string name="content_desc_tyro_logo">tyro logo</string>
     <string name="content_desc_eftpos_logo">eftpos logo</string>
@@ -21,8 +28,4 @@
     <string name="content_desc_backspace">backspace</string>
     <string name="content_desc_back">back</string>
     <string name="content_desc_error">error</string>
-    <string name="digital_receipt_input_label">Customer\'s Email</string>
-    <string name="send_digital_receipt_button">Send Digital Receipt</string>
-    <string name="digital_receipt_success_msg">Digital receipt will be sent</string>
-    <string name="digital_receipt_failed_msg">Digital receipt request failed</string>
 </resources>
