@@ -77,7 +77,6 @@ android {
   buildTypes {
     debug {
       signingConfig = signingConfigs.getByName("default")
-      matchingFallbacks += listOf("tyroDebug")
     }
     release {
       signingConfig = signingConfigs.getByName("default")
